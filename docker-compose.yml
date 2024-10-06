@@ -18,7 +18,7 @@ services:
       - ./data:/var/lib/postgresql/data
 
   server:
-    image: myserver:v2
+    image: myserver:v1.0
     command: ["-h", "db", "-U", "postgres", "-P", "QAZxsw123", "-d", "postgres"]
     ports:
       - "58080:58080"

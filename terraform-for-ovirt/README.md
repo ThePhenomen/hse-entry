@@ -1,7 +1,7 @@
 Использование Terraform провайдера для Ovirt:
-# В случае использования Debian дистрибутивов
+В случае использования Debian дистрибутивов:
 sudo apt-get --assume-yes install gcc libxml2-dev python3-dev
-# В случае использования RHEL дистрибутивов
+В случае использования RHEL дистрибутивов:
 sudo dnf install -y gcc libxml2-devel python3-devel 
 pip3 install -r requirements.txt
 export TF_VAR_username=<username>

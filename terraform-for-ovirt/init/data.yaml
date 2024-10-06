@@ -1,0 +1,17 @@
+#cloud-config
+preserve_hostname: false
+prefer_fqdn_over_hostname: true
+create_hostname_file: true
+users:
+- name: astra
+  lock_passwd: false
+  plain_text_passwd: QAZxsw123
+  sudo: ALL=(ALL) NOPASSWD:ALL
+  ssh_authorized_keys: 
+    - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDcUSvsKAk4Rs+jhRD5QsGIxVOszFFpLb6XE9LPp9BzursFiAs0t4s8wqb1OqbFWfL4f8DQTjE2CWh+m5A89OvYLdDKVFEYPLN/rA/C8154r0UD+AIOswzr1ANslxzcgdKvnIaLtOoSay88mJkJhRF5ZmO+WGt1lYOK+Avq1ARJnMWe0T1co974gq/8Of9YkJIljgf1ITGNC6zg8pxTbaecdxJ4gdPqVsyXrBLjJ56S8rwqgY4HH0s0sMHI+Iw43e3aRZXKFxiAvdqIrq/SF8x7EhDllWKjUI12w8fA7NT1Sb+uzjToATamXtLJywd+Qi/qHj4hy4TpJ50CpJSHK+Q0cqrSPlybWXLolNN5bERmZt/EzlMsbbvmg5B3Zx3BAoau16yFuU8QuD+Baq5yfGESkczNLWmbCStAyke3mhWvspf2tIr9U5OEescuRl66orqy/G0lVOPna6FusttvDSTbhgcjyWU6SqcUCJK1J0WJNRZuF99Ei/iiCguSpNS+WPc= dmitry@DMATUSHKIN
+manage_resolv_conf: true
+resolv_conf: 
+  nameservers:
+    - 172.26.76.150
+runcmd:
+  - [ systemctl, restart, networking ]

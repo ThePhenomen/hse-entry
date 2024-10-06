@@ -1,0 +1,3 @@
+Cmake
+ovirt-engine-sdk-python==4.6.1
+python-tfvars

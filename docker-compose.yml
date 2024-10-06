@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+
+  db:
+    image: postgres:11-alpine
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_PASSWORD: QAZxsw123
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "postgres"
+      POSTGRES_HOST_AUTH_METHOD: "md5"
+    volumes:
+      - type: bind
+        source: ./init-user-db.sh
+        target: /docker-entrypoint-initdb.d/init-user-db.sh
+      - ./data:/var/lib/postgresql/data
+
+  server:
+    image: myserver:v2
+    command: ["-h", "db", "-U", "postgres", "-P", "QAZxsw123", "-d", "postgres"]
+    ports:
+      - "58080:58080"
+    restart: on-failure
+    depends_on:
+      - db

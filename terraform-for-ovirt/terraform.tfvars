@@ -1,9 +1,9 @@
-vms_count      = 7
-hostnames      = ["cddisk01.r7-office.croc.demo", "ds.r7-office.croc.demo", "psql01.r7-office.croc.demo", "psql02.r7-office.croc.demo", "search01.r7-office.croc.demo", "nfs.r7-office.croc.demo", "graph.r7-office.croc.demo"]
-vm_volume_size = [64424509440, 34359738368, 34359738368, 34359738368, 34359738368, 64424509440, 34359738368]
-vm_cpu         = [4, 4, 4, 4, 4, 2, 4]
-vm_ozu         = [8589934592, 8589934592, 4294967296, 4294967296, 4294967296, 2147483648, 4294967296]
-comment        = ["VM R7 Disk", "VM R7 DS", "VM R7 Psql1", "VM R7 Psql2", "VM R7 Search", "VM R7 NFS", "VM R7 Graph"]
+vms_count      = 1
+hostnames      = ["vm.hse.intro"]
+vm_volume_size = [34359738368]
+vm_cpu         = [4]
+vm_ozu         = [4294967296]
+comment        = ["VM for HSE BHS"]
 cluster_id     = "fba4ae68-52a5-11ef-b70f-00163e6e10e1"
 template_id    = "e265a14f-f9c1-49a8-a0be-a6c563b7d2d1"
 url            = "https://engine.zvirt.lab2/ovirt-engine/api/"

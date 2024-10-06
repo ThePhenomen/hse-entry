@@ -19,4 +19,4 @@ for profile in profiles_service.list():
         profile_id = profile.id
         break
 
-print(profile_id)
+print('export TF_VAR_vnic_id={}'.format(profile_id))

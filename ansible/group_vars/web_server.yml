@@ -1,0 +1,5 @@
+# Image data
+image_state: present
+image_path: "../Dockerfile"
+image_name: "myserver"
+image_tag: "v6.0"

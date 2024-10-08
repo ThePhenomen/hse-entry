@@ -1,0 +1,5 @@
+# Docker compose data
+docker_compose_path: "../docker-compose.yml"
+
+# Manage volumes after destroying all
+manage_volumes_destroy: false

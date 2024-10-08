@@ -1,0 +1,7 @@
+db_server:
+  hosts:
+    gitlab-runner:
+
+web_server:
+  hosts:
+    gitlab-runner:

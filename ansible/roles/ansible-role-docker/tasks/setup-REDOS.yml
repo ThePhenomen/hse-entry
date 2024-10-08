@@ -1,0 +1,29 @@
+---
+- name: Install Docker version
+  dnf:
+    name:
+      - docker-ce
+      - docker-ce-cli
+    state: "{{ docker_state }}"
+
+- name: Check docker runtime installed
+  block:
+
+    - name: Gather facts about packages
+      package_facts:
+        manager: "auto"
+
+    - name: Check if contaierd is installed
+      debug:
+        msg: "{{ ansible_facts.packages['containerd'] | length | string + ' versions of containerd are installed!' if 'containerd' in ansible_facts.packages else 'The containerd package is not installed.' }}"
+
+    - name: Check if container-selinux is installed
+      debug:
+        msg: "{{ ansible_facts.packages['container-selinux'] | length | string + ' versions of container-selinux are installed!' if 'container-selinux' in ansible_facts.packages else 'The container-selinux package is not installed.' }}"
+
+- name: Install docker-compose version
+  dnf:
+    name:
+      - docker-compose
+    state: "{{ docker_compose_state }}"
+  when: install_docker_compose | bool

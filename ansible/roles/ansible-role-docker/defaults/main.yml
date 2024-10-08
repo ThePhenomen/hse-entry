@@ -1,0 +1,10 @@
+---
+# defaults file for ansible-role-docker
+# docker-compose state
+install_docker_compose: true
+docker_compose_state: latest
+# Docker state
+docker_service_state: started
+docker_service_enabled: true
+docker_state: latest
+docker_daemon_options: {}

@@ -14,7 +14,6 @@
         state: present
         recreate: always
       tags: [ deploy ]
-      register: output
 
     - name: Destroy all
       community.docker.docker_compose_v2:
@@ -22,36 +21,23 @@
         state: absent
         remove_volumes: "{{ manage_volumes_destroy }}"
       tags: [ destroy ]
-      register: output
-
-    - name: Show results
-      debug:
-        var: output
-      tags: always
 
 - hosts: db_server
   tasks:
     - name: Deploy postgres
       community.docker.docker_compose_v2:
         project_src: "{{ docker_compose_path }}"
-        service: db
+        services: db
         state: present
         recreate: always
       tags: [ deploy_infra, deploy_db, deploy ]
-      register: output
 
     - name: Destroy postgres
       community.docker.docker_compose_v2:
         project_src: "{{ docker_compose_path }}"
-        service: db
+        services: db
         state: absent
       tags: [ destroy_infra, destroy_db, destroy ]
-      register: output
-
-    - name: Show results
-      debug:
-        var: output
-      tags: always
 
 - hosts: web_server
   tasks:
@@ -59,31 +45,30 @@
       community.docker.docker_image:
         build:
           path: "{{ image_path }}"
-        name: "{{ image_name }}"
+        name: "myserver"
         tag: "{{ image_tag }}"
         source: build
         state: "{{ image_state }}"
       tags: [ build_web, deploy_web, deploy]
-      register: output
+
+    - name: Update Docker image version
+      ansible.builtin.replace:
+        regexp: '^(\s*image:\s*myserver:)(v[0-9]+\.[0-9]+)'
+        replace: '\1{{ image_tag }}'
+        path: "{{ docker_compose_path }}/docker-compose.yml"
+      tags: [ build_web, deploy_web, deploy]
 
     - name: Deploy web
       community.docker.docker_compose_v2:
         project_src: "{{ docker_compose_path }}"
         state: present
         recreate: always
-        service: server
+        services: server
       tags: [ deploy_web, deploy ]
-      register: output
 
     - name: Destroy web
       community.docker.docker_compose_v2:
         project_src: "{{ docker_compose_path }}"
-        service: server
+        services: server
         state: absent
       tags: [ destroy_web, destroy ]
-      register: output
-
-    - name: Show results
-      debug:
-        var: output
-      tags: always

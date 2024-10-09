@@ -62,7 +62,7 @@ logs-dev: ## Получить логи базы данных
 logs: logs-dev ## Получить логи инсталляции
 	@docker-compose logs server
 
-test: ## Проверка работоспосбности инсталляции
+test: ## Проверка работоспособности инсталляции
 	@echo "--- Container status ---"
 	@docker ps --format "{{.Names}}: {{.Status}}"
 	@echo "--- Port readiness ---"

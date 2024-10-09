@@ -172,12 +172,12 @@ python3 -m pip install --user ansible-core==*version*
 ```
 ansible-galaxy install -r requirements.yml
 ```
-В данном проекте имеются две роли: по настройке firewall и docker, и задания по созданию и удалению контейнеров. 
+В данном проекте имеются две роли: по настройке firewall и docker, и задания по созданию и удалению контейнеров. Роль для docker включает в себя настройку docker для дистрибутивов Astra Linux и РедОС. Для настройки прочих дистрибутивов возможно использовать преднаписанную роль https://github.com/geerlingguy/ansible-role-docker/tree/master, где значения переменных в "defaults/main.yml" похожи на значения переменных для данной роли.
 Перед запуском роли ansible-role-firewall необходимо отредактировать значения в файле "roles/ansible-role-firewall/defaults/main.yml":
  - firewall_state - определяет статус firewall (started, stopped, restarted);
  - firewall_enabled_at_boot - добавлять ли firewall в автозагрузку (boolean);
- - firewall_allowed_tcp_ports - список разрешенных tcp портов;
- - firewall_allowed_udp_ports - список разрешенных udp портов;
+ - firewall_allowed_tcp_ports - список разрешенных TCP портов;
+ - firewall_allowed_udp_ports - список разрешенных UDP портов;
  - firewall_enable_ipv6 - требуется ли использование ipv6 (boolean);
  - firewall_disable_firewalld - отключить ли firewalld (boolean);
  - firewall_disable_ufw - отключить ли ufw (boolean).

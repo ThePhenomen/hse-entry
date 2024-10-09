@@ -3,6 +3,9 @@
 - include_tasks: setup-REDOS.yml
   when: ansible_facts['os_family'] == "RED"
 
+- include_tasks: setup-Astra.yml
+  when: ansible_facts['os_family'] == "Astra Linux"
+
 - name: Configure Docker daemon options
   copy:
     content: "{{ docker_daemon_options | to_nice_json }}"

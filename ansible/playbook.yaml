@@ -2,10 +2,10 @@
 - hosts: all
   roles:
     - role: ansible-role-firewall
-      tags: [ setup, firewall, deploy ]
+      tags: [ setup, firewall ]
 
     - role: ansible-role-docker
-      tags: [ setup, docker, deploy ]
+      tags: [ setup, docker ]
 
   tasks:
     - name: Deploy all
@@ -49,14 +49,14 @@
         tag: "{{ image_tag }}"
         source: build
         state: "{{ image_state }}"
-      tags: [ build_web, deploy_web, deploy]
+      tags: [ build_web ]
 
     - name: Update Docker image version
       ansible.builtin.replace:
         regexp: '^(\s*image:\s*myserver:)(v[0-9]+\.[0-9]+)'
         replace: '\1{{ image_tag }}'
         path: "{{ docker_compose_path }}/docker-compose.yml"
-      tags: [ build_web, deploy_web, deploy]
+      tags: [ build_web ]
 
     - name: Deploy web
       community.docker.docker_compose_v2:

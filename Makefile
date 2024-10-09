@@ -1,6 +1,9 @@
 .DEFAULT_GOAL := help
 IMAGE ?= myserver
 TAG ?= v1.0
+PORT ?= 58080
+NET ?= 172.26.76.0
+MASK ?= 24
 
 help: ## Подсказка по доступным командам
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}'
@@ -63,7 +66,17 @@ test: ## Проверка работоспосбности инсталляци�
 	@echo "--- Container status ---"
 	@docker ps --format "{{.Names}}: {{.Status}}"
 	@echo "--- Port readiness ---"
-	@printf 'GET / HTTP/1.1\n\n' > /dev/tcp/127.0.0.1/58080 > /dev/null 2>&1 && echo "Port 58080 is open" || echo "Port 58080 is closed"
-	@wget -T5 --spider http://127.0.0.1:58080 > /dev/null 2>&1 && echo "Port 58080 not empty" || echo "Port 58080 is empty"
-	
-.PHONY: up down dev-up dev-down build test logs-dev logs install-astra install-debian install-redos install-rhel
+	@printf 'GET / HTTP/1.1\n\n' > /dev/tcp/127.0.0.1/${PORT} > /dev/null 2>&1 && echo "Port ${PORT} is open" || echo "Port ${PORT} is closed"
+	@wget -T5 --spider http://127.0.0.1:${PORT} > /dev/null 2>&1 && echo "Port ${PORT} not empty" || echo "Port ${PORT} is empty"
+
+conf_firewalld: ## Настройка firewalld (при его использовании)
+	@firewall-cmd --permanent --add-port=${PORT}/tcp
+	@firewall-cmd --permanent --add-source=${NET}/${MASK}
+	@firewall-cmd --reload
+
+conf_ufw: ## Настройка ufw (при его использовании)
+	@ufw allow ${PORT}/tcp
+	@ufw allow from ${NET}/${MASK}
+	@ufw enable
+
+.PHONY: up down dev-up dev-down build test logs-dev logs install-astra install-debian install-redos install-rhel conf_firewalld conf_ufw

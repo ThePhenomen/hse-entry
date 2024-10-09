@@ -1,0 +1,24 @@
+---
+- name: Install Docker version
+  apt:
+    name:
+      - docker.io
+    state: "{{ docker_state }}"
+
+- name: Check docker runtime installed
+  block:
+
+    - name: Gather facts about packages
+      package_facts:
+        manager: "auto"
+
+    - name: Check if contaierd is installed
+      debug:
+        msg: "{{ ansible_facts.packages['containerd'] | length | string + ' versions of containerd are installed!' if 'containerd' in ansible_facts.packages else 'The containerd package is not installed.' }}"
+
+- name: Install docker-compose version
+  apt:
+    name:
+      - docker-compose
+    state: "{{ docker_compose_state }}"
+  when: install_docker_compose | bool

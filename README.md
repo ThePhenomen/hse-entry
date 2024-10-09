@@ -159,7 +159,9 @@ sudo dnf install make -y
  - logs:             Получить логи инсталляции
  - test:             Проверка работоспособности инсталляции
  - up:               Запуск базы данных и сервера на основе docker-compose
+
 Для получения списка доступных команд необходимо написать "make" или "make help". Команды необходимо выполнять с помощью sudo. При использовании команды "make build" возможно указать название и тэг для создаваемого образа следующим образом: "make build TAG=*tag* IMAGE=*image_name*". По умолчанию, эти значения равны "myserver" и "v1.0" соответственно. При сборке образа и указании новых значений для вышеупомянутых переменных данные образа в "docker-compose.yml" будут автоматически обновлены.
+
 При изменении порта, который будет открыт на сервере для обеспечения доступа к веб-серверу, необходимо в Makefile для команды "make test" указывать порт "make test PORT=*port*, для команды "make conf_firewalld/conf_ufw" необходимо указывать порт, сеть и маску сети, для которых будет открыт доступ "make conf_firewalld/conf_ufw PORT=*port* NET=*net* MASK=*net_mask*". Значение сети, маски и порты, по умолчанию, равны 172.26.76.0, 24 и 58080 соответственно.
 
 ### Использование Ansible для развертывания инфраструктуры
@@ -173,6 +175,7 @@ python3 -m pip install --user ansible-core==*version*
 ansible-galaxy install -r requirements.yml
 ```
 В данном проекте имеются две роли: по настройке firewall и docker, и задания по созданию и удалению контейнеров. Роль для docker включает в себя настройку docker для дистрибутивов Astra Linux и РедОС. Для настройки прочих дистрибутивов возможно использовать преднаписанную роль https://github.com/geerlingguy/ansible-role-docker/tree/master, где значения переменных в "defaults/main.yml" похожи на значения переменных для данной роли.
+
 Перед запуском роли ansible-role-firewall необходимо отредактировать значения в файле "roles/ansible-role-firewall/defaults/main.yml":
  - firewall_state - определяет статус firewall (started, stopped, restarted);
  - firewall_enabled_at_boot - добавлять ли firewall в автозагрузку (boolean);
@@ -181,6 +184,7 @@ ansible-galaxy install -r requirements.yml
  - firewall_enable_ipv6 - требуется ли использование ipv6 (boolean);
  - firewall_disable_firewalld - отключить ли firewalld (boolean);
  - firewall_disable_ufw - отключить ли ufw (boolean).
+
 Перед запуском роли ansible-role-docker необходимо отредактировать значения в файле "roles/ansible-role-docker/defaults/main.yml":
  - install_docker_compose - требуется ли установки docker-compose (boolean);
  - docker_compose_state - состояние пакета docker-compose (installed, latest, absent, removed);
@@ -188,9 +192,11 @@ ansible-galaxy install -r requirements.yml
  - docker_service_enabled - добавлять ли docker в автозагрузку (boolean);
  - docker_state - состояние пакета docker (installed, latest, absent, removed);
  - docker_daemon_options - параметры для docker демона (следует указывать, если требуется, например, использование прокси для выхода в интернет, определить размер лог файлов для docker или использование собственных репозиториев на HTTP) Пример: строка для репозиториев на HTTP - "insecure-registries" : [ "10.55.10.43:8123" ].
+
 В файле "ansible.cfg" необходимо указать пользователя, под которым будет осуществляться подключение. Важно: для этого пользователя должна быть добавлена публичная часть ssh ключа для подключения без пароля, а также добавлена возможность выполнять команды sudo без ввода пароля.
 В файле "inventory.yml" необходимо указать сервер, на который будет подключаться Ansible. Важно: FQDN данного сервера должен разрешаться в IP адрес (необходима запись в "/etc/hosts" или в службу DNS).
- Для запуска скриптов необходимо использовать следующую команду:
+
+Для запуска скриптов необходимо использовать следующую команду:
  ```
  cd ansible
  ansible-playbook playbook.yml --tags "*tag*"
@@ -208,6 +214,7 @@ ansible-galaxy install -r requirements.yml
  - destroy_db - удаление только СУБД;
  - destroy_web - удаление только веб-сервера;
  - destroy - удаление всей инфраструктуры.
+
 Пример: настройка firewall и docker и развертывание всех сервисов:
 ```
 ansible-playbook playbook.yml --tags "setup,deploy"
